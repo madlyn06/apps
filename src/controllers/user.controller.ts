@@ -27,8 +27,8 @@ export const editUserController = async(req: Request, res: Response)=>{
   const {username, role,password } = req.body
   const user = await userRepository.findOneBy({ username })
   if(user) {
-    await userRepository.update({username},{password, role} ) 
-    return res.json({ message: 'Update succesfully' })
+    const result = await userRepository.update({username},{password, role} ) 
+    return res.json({ message: 'Update succesfully', result })
   } else {
     return res.json({ message: 'Update failed' })
   }

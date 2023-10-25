@@ -1,4 +1,3 @@
-import { AppDataSource } from "db/data-source"
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from "typeorm"
 
 @Entity()

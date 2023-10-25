@@ -4,6 +4,14 @@ import { RegisterReqBody, UserRole } from "~/request/user.request";
 import { signToken } from "~/ultills/jwt";
 
 class UsersService {
+  async checkEmailExist(email: string) {
+    const user = await userRepository.findOneBy({ email })
+    return user
+  }
+  async checkUsernameExist(username:string) {
+    const user = await userRepository.findOneBy({ username })
+    return user
+  }
   private signAccessToken({ user_id, role }: { user_id: string; role: UserRole }) {
     return signToken({
       payload: { user_id, role },
@@ -22,7 +30,7 @@ class UsersService {
     return Promise.all([this.signAccessToken({ role, user_id }), this.signRefreshToken({ role, user_id })])
   }
   async register(payload: RegisterReqBody) {
-    console.log(payload)
+    // tạo dữ liệu
       const user = new User()
       user.username = payload.username
       user.email = payload.email
@@ -30,7 +38,9 @@ class UsersService {
       user.role = payload.role
       user.createdAt = new Date()
       user.updatedAt = new Date()
+      // insert database
     await userRepository.save(user)
+    // tạo token
     const [access_token, refresh_token] = await this.signToken({ user_id: user.username, role: user.role })
     return { access_token, refresh_token }
   }
